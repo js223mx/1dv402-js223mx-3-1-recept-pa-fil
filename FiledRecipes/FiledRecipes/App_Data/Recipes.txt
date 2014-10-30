@@ -14,7 +14,7 @@ Filmjölkslimpa
 1,5;tsk;bakpulver
 1,5;tsk;bikarbonat
 2;tsk;brödkryddor
-1;dl;hasselnötter
+1;dl;hasselnöttersw
 1;dl;torkade fikon
 1;dl;russin
 [Instruktioner]
