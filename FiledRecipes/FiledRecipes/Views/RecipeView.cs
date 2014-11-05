@@ -12,13 +12,13 @@ namespace FiledRecipes.Views
     /// </summary>
     public class RecipeView : ViewBase, IRecipeView
     {
-        public void Show(Enumerable<IRecipe> recipes) 
+        public void Show(IEnumerable<IRecipe> recipes) 
         {
-            ContinueOnKeyPressed();
-
+            
             foreach(var recipe in recipes)
             {
-                Console.WriteLine();
+                Show(recipe);
+                ContinueOnKeyPressed();
             }
         }
         public void Show(IRecipe recipe) 

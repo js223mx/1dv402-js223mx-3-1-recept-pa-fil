@@ -199,6 +199,8 @@ namespace FiledRecipes.Domain
             OnRecipesChanged(EventArgs.Empty);
 
         }
+
+        //sparar och skriver ut receptet
         public void Save() 
         {
             using (StreamWriter sw = new StreamWriter(_path)) 
