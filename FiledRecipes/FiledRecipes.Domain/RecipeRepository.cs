@@ -134,7 +134,7 @@ namespace FiledRecipes.Domain
 
         //skapar en lista med referens till  receptobjectet
         List<IRecipe> myLoadList = new List<IRecipe> ();
-        RecipeReadStatus recipestatus = RecipeReadStatus.Indefinite;
+        RecipeReadStatus recipestatus = RecipeReadStatus.Indefinite; //räknar och håller ordningen
 
         //läser av textfilen
         using (StreamReader sr = new StreamReader(_path)) 
@@ -161,13 +161,14 @@ namespace FiledRecipes.Domain
 
                             switch (recipestatus) 
                             {
+                                    //skapar ett nytt recept i listan
                                 case RecipeReadStatus.New:
                                     newRecipe = new Recipe(line);
                                     myLoadList.Add(newRecipe);
                                     break;
 
                                 case RecipeReadStatus.Ingredient:
-                                    String [] splitIngredient = line.Split(new String[]{";"}, StringSplitOptions.None); //splittar i texfilen 
+                                    String [] splitIngredient = line.Split(new String[]{";"}, StringSplitOptions.None); //splittar i texfilen, och sätter in ett semicolon mellan de olika delarna 
                                     if (splitIngredient.Length != 3)
                                     {
                                         throw new FileFormatException();
@@ -195,7 +196,7 @@ namespace FiledRecipes.Domain
 
             //sorterar efter receptnamn
             _recipes = myLoadList.OrderBy(recipe => recipe.Name).ToList();
-            IsModified = false;
+            IsModified = false; // Tilldelar avsedd egenskap i klassen, IsModified, ett värdet som indekerar att listan med recept är oförändrad.
             OnRecipesChanged(EventArgs.Empty);
 
         }

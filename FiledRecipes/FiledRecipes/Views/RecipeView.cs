@@ -20,6 +20,7 @@ namespace FiledRecipes.Views
                 Show(recipe);
                 ContinueOnKeyPressed();
             }
+
         }
         public void Show(IRecipe recipe) 
         {
