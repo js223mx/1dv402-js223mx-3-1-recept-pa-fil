@@ -1,4 +1,4 @@
-[Recept]
+﻿[Recept]
 Filmjölkslimpa
 [Ingredienser]
 4,5;dl;filmjölk
@@ -8,6 +8,7 @@ Filmjölkslimpa
 1;dl;havregryn
 2,5;dl;grovt rågmjöl
 3;dl;vetemjöl
+           					      				
 1;dl;linfrön
 1;dl;solrosfrön
 1,5;tsk;salt

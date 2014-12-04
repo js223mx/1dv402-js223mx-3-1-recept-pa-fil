@@ -130,25 +130,30 @@ namespace FiledRecipes.Domain
         public virtual void Load()
         {
 
-        Recipe newRecipe = null;
+            Recipe newRecipe = null;
 
-        //skapar en lista med referens till  receptobjectet
-        List<IRecipe> myLoadList = new List<IRecipe> ();
-        RecipeReadStatus recipestatus = RecipeReadStatus.Indefinite; //räknar och håller ordningen
+            //skapar en lista med referens till  receptobjectet
+            List<IRecipe> myLoadList = new List<IRecipe>();
+            RecipeReadStatus recipestatus = RecipeReadStatus.Indefinite; // håller ordningen
 
-        //läser av textfilen
-        using (StreamReader sr = new StreamReader(_path)) 
+            //läser av textfilen
+            using (StreamReader sr = new StreamReader(_path))
             {
                 string line;
-               
-                while ((line = sr.ReadLine()) != null) 
+
+                while ((line = sr.ReadLine()) != null)
                 {
-                    switch(line) 
+                    if (String.IsNullOrWhiteSpace(line))
+                    {
+                        continue;
+                    }
+
+                    switch (line)
                     {
                         case SectionRecipe:
                             recipestatus = RecipeReadStatus.New;
                             break;
-                            
+
                         case SectionIngredients:
                             recipestatus = RecipeReadStatus.Ingredient;
                             break;
@@ -156,27 +161,27 @@ namespace FiledRecipes.Domain
                         case SectionInstructions:
                             recipestatus = RecipeReadStatus.Instruction;
                             break;
-                        
+
                         default:
 
-                            switch (recipestatus) 
+                            switch (recipestatus)
                             {
-                                    //skapar ett nytt recept i listan
+                                //skapar ett nytt recept i listan
                                 case RecipeReadStatus.New:
                                     newRecipe = new Recipe(line);
                                     myLoadList.Add(newRecipe);
                                     break;
 
                                 case RecipeReadStatus.Ingredient:
-                                    String [] splitIngredient = line.Split(new String[]{";"}, StringSplitOptions.None); //splittar i texfilen, och sätter in ett semicolon mellan de olika delarna 
+                                    String[] splitIngredient = line.Split(new String[] { ";" }, StringSplitOptions.None); //splittar i texfilen, och sätter in ett semicolon mellan de olika delarna 
                                     if (splitIngredient.Length != 3)
                                     {
                                         throw new FileFormatException();
                                     }
                                     Ingredient newIngredient = new Ingredient();
-                                    newIngredient.Amount = splitIngredient [0];
-                                    newIngredient.Measure = splitIngredient [1];
-                                    newIngredient.Name = splitIngredient [2];
+                                    newIngredient.Amount = splitIngredient[0];
+                                    newIngredient.Measure = splitIngredient[1];
+                                    newIngredient.Name = splitIngredient[2];
                                     newRecipe.Add(newIngredient);
                                     break;
 
@@ -196,27 +201,27 @@ namespace FiledRecipes.Domain
 
             //sorterar efter receptnamn
             _recipes = myLoadList.OrderBy(recipe => recipe.Name).ToList();
-            IsModified = false; // Tilldelar avsedd egenskap i klassen, IsModified, ett värdet som indekerar att listan med recept är oförändrad.
+            IsModified = false; // Tilldelar avsedd egenskap i klassen IsModified, ett värdet som indekerar att listan med recept är oförändrad.
             OnRecipesChanged(EventArgs.Empty);
 
         }
 
         //sparar och skriver ut receptet
-        public void Save() 
+        public void Save()
         {
-            using (StreamWriter sw = new StreamWriter(_path)) 
+            using (StreamWriter sw = new StreamWriter(_path))
             {
-                foreach (var recipe in _recipes) 
+                foreach (IRecipe recipe in _recipes)
                 {
                     sw.WriteLine(SectionRecipe);
                     sw.WriteLine(recipe.Name);
                     sw.WriteLine(SectionIngredients);
-                    foreach(var myIngredients in recipe.Ingredients)
+                    foreach (IIngredient myIngredients in recipe.Ingredients)
                     {
                         sw.WriteLine("{0};{1};{2}", myIngredients.Amount, myIngredients.Measure, myIngredients.Name);
                     }
                     sw.WriteLine(SectionInstructions);
-                    foreach (var myInstructions in recipe.Instructions) 
+                    foreach (string myInstructions in recipe.Instructions)
                     {
                         sw.WriteLine(myInstructions);
                     }

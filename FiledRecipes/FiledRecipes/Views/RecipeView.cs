@@ -15,7 +15,7 @@ namespace FiledRecipes.Views
         public void Show(IEnumerable<IRecipe> recipes) 
         {
             
-            foreach(var recipe in recipes)
+            foreach(IRecipe recipe in recipes)
             {
                 Show(recipe);
                 ContinueOnKeyPressed();
@@ -30,7 +30,7 @@ namespace FiledRecipes.Views
 
             Console.WriteLine("Ingredienser");
             Console.WriteLine("=============");
-            foreach (var ingredient in recipe.Ingredients) 
+            foreach (IIngredient ingredient in recipe.Ingredients) 
             {
                 Console.WriteLine(ingredient);
             }
@@ -38,7 +38,7 @@ namespace FiledRecipes.Views
 
             Console.WriteLine("Instruktioner");
             Console.WriteLine("==============");
-            foreach (var instruction in recipe.Instructions) 
+            foreach (string instruction in recipe.Instructions) 
             {
                 Console.WriteLine(instruction);
             }
